@@ -30,7 +30,6 @@ public class AnimalMapper {
         return uploadDir;
     }
 
-
     public void extensionCheck(MultipartFile file) {
         String fileName = file.getOriginalFilename();
         if (FilenameUtils.getExtension(fileName).equals("csv")) {
