@@ -1,6 +1,5 @@
 package org.example.testtask.services;
 
-import com.sun.xml.internal.bind.v2.TODO;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.example.testtask.models.Animal;
@@ -25,7 +24,7 @@ public class AnimalMapper {
 
     @Value("${readingFile.uploadDir}")
     private String uploadDir;
-    private ValidateObjects validateObjects = new ValidateObjects();
+    private final ValidateObjects validateObjects = new ValidateObjects();
 
     public String getUploadDir() {
         return uploadDir;
@@ -72,7 +71,6 @@ public class AnimalMapper {
             throw new RuntimeException(e);
         }
     }
-
 
     //TODO: finish the method mappingXML
 
