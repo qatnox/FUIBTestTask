@@ -5,5 +5,3 @@ This Animal Management System designed to handle the upload and management of an
 
 ## Info
 - Java 17 used
-
-
