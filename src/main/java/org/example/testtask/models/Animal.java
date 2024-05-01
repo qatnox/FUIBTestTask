@@ -7,6 +7,10 @@ public class Animal {
     private String sex;
     private int weight;
     private int cost;
+    private String category;
+
+    public Animal() {
+    }
 
     public String getName() {
         return name;
@@ -48,6 +52,24 @@ public class Animal {
         this.cost = cost;
     }
 
+    public String getCategory() {
+        int cost = getCost();
+
+        if (cost <= 20) {
+            return "1st";
+        } else if (cost <= 40) {
+            return "2nd";
+        } else if (cost <= 60) {
+            return "3rd";
+        } else {
+            return "4th";
+        }
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     @Override
     public String toString() {
         return "Animal{" +
@@ -56,6 +78,7 @@ public class Animal {
                 ", sex='" + sex + '\'' +
                 ", weight=" + weight +
                 ", cost=" + cost +
+                ", category='" + category + '\'' +
                 '}';
     }
 }

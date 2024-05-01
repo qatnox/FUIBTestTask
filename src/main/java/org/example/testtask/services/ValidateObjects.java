@@ -8,26 +8,18 @@ public class ValidateObjects {
 
 
     public boolean isValid(Animal animal) {
-        if(animal.getName() == null || animal.getName().isEmpty()) {
+        if (animal.getName() == null || animal.getName().isEmpty()) {
             return false;
         }
-        if(animal.getType() == null || animal.getType().isEmpty()) {
+        if (animal.getType() == null || animal.getType().isEmpty()) {
             return false;
         }
-        if(animal.getSex() == null || animal.getSex().isEmpty()) {
+        if (animal.getSex() == null || animal.getSex().isEmpty()) {
             return false;
         }
-        try {
-            Integer.parseInt(String.valueOf(animal.getWeight()));
-        } catch (NumberFormatException e) {
+        if (animal.getWeight() <= 0) {
             return false;
         }
-        try {
-            Integer.parseInt(String.valueOf(animal.getCost()));
-        } catch (NumberFormatException e) {
-            return false;
-        }
-
-        return true;
+        return animal.getCost() > 0;
     }
 }

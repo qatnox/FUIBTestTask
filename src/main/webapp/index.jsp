@@ -1,5 +1,5 @@
 <html>
 <body>
-<h2>Hello World!</h2>
+<a href="files/uploads">Go to the upload page</a>
 </body>
 </html>

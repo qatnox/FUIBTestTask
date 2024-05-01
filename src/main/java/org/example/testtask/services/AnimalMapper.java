@@ -3,6 +3,8 @@ package org.example.testtask.services;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.example.testtask.models.Animal;
+import org.example.testtask.models.Animals;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,13 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import java.io.BufferedReader;
+import java.io.*;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -25,6 +23,13 @@ public class AnimalMapper {
     @Value("${readingFile.uploadDir}")
     private String uploadDir;
     private final ValidateObjects validateObjects = new ValidateObjects();
+
+    private final Animals animals;
+
+    @Autowired
+    public AnimalMapper(Animals animals) {
+        this.animals = animals;
+    }
 
     public String getUploadDir() {
         return uploadDir;
@@ -39,11 +44,8 @@ public class AnimalMapper {
         }
     }
 
-    //TODO: Remove sout(animal)
-
     public void mappingCSV(MultipartFile file) {
         String filePath = getUploadDir() + file.getOriginalFilename();
-        List<Animal> animals = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 
@@ -58,37 +60,66 @@ public class AnimalMapper {
                 BeanUtils.setProperty(animal, "type", fields[1]);
                 BeanUtils.setProperty(animal, "sex", fields[2]);
                 BeanUtils.setProperty(animal, "weight", Integer.parseInt(fields[3]));
-                BeanUtils.setProperty(animal, "cost", Integer.parseInt(fields[3]));
+                BeanUtils.setProperty(animal, "cost", Integer.parseInt(fields[4]));
 
                 if (validateObjects.isValid(animal)) {
-                    animals.add(animal);
-                    System.out.println(animal); // TEMPORARY ==================================================================
+                    animals.addAnimal(animal);
+                    animal.setCategory(animal.getCategory());
                 }
-            }
 
+            }
+            saveToFile(animals.getAnimalList());
         } catch (IOException | InvocationTargetException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
 
-    //TODO: finish the method mappingXML
-
     public void mappingXML(MultipartFile file) {
         String filePath = getUploadDir() + file.getOriginalFilename();
-        Animal animal;
 
         try {
-            JAXBContext context = JAXBContext.newInstance(Animal.class);
+            JAXBContext context = JAXBContext.newInstance(Animals.class);
             Unmarshaller unmarshaller = context.createUnmarshaller();
-            animal = (Animal) unmarshaller.unmarshal(new File(filePath));
+            Animals root = (Animals) unmarshaller.unmarshal(new File(filePath));
 
-            /*if(validateObjects.isValid(animal)) {
-                animals.add(animal);
-                System.out.println(animal);
-            }*/
-
+            if (root != null) {
+                if (root.getAnimalList() != null && !root.getAnimalList().isEmpty()) {
+                    for (Animal animal : root.getAnimalList()) {
+                        if (validateObjects.isValid(animal)) {
+                            animals.addAnimal(animal);
+                            animal.setCategory(animal.getCategory());
+                        }
+                    }
+                }
+                saveToFile(animals.getAnimalList());
+            }
         } catch (JAXBException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public List<Animal> getAnimalList() {
+        return animals.getAnimalList();
+    }
+
+    public void saveToFile(List<Animal> animals) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\uploads\\result.csv"))) {
+            writer.write("name" + ";"
+                    + "type" + ";"
+                    + "sex" + ";"
+                    + "weight" + ";"
+                    + "cost" + ";"
+                    + "category" + "\n");
+            for (Animal animal : animals) {
+                writer.write(animal.getName() + ";"
+                        + animal.getType() + ";"
+                        + animal.getSex() + ";"
+                        + animal.getWeight() + ";"
+                        + animal.getCost() + ";"
+                        + animal.getCategory() + "\n");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to save animals to file", e);
         }
     }
 }

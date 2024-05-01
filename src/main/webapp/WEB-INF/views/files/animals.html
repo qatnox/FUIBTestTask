@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Animals</title>
+</head>
+<body>
+<p id="animalList"></p>
+
+<hr/>
+<a href="/files/uploads">Re-upload</a>
+
+<script>
+    const animalListElement = document.getElementById("animalList");
+
+    fetch('/animals')
+        .then(response => response.json())
+        .then(data => {
+            if (Array.isArray(data)) {
+                animalListElement.textContent = JSON.stringify(data);
+            } else {
+                animalListElement.textContent = data;
+            }
+        })
+        .catch(error => console.error(error));
+</script>
+</body>
+</html>
