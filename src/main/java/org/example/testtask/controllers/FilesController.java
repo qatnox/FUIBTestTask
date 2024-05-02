@@ -29,12 +29,16 @@ public class FilesController {
     private final AnimalService animalService;
     private final AnimalMapper animalMapper;
 
+    @Autowired
+    private final Animals animalsList;
+
 
     @Autowired
-    public FilesController(FileDAO fileDAO, AnimalService animalService, AnimalMapper animalMapper) {
+    public FilesController(FileDAO fileDAO, AnimalService animalService, AnimalMapper animalMapper, Animals animalsList) {
         this.fileDAO = fileDAO;
         this.animalService = animalService;
         this.animalMapper = animalMapper;
+        this.animalsList = animalsList;
     }
 
     @GetMapping("/uploads")
@@ -42,7 +46,6 @@ public class FilesController {
         return "files/uploads";
     }
 
-    //TODO: Show information ?error=...
 
     @PostMapping("/uploads")
     public String upload(@RequestParam("file") MultipartFile file) {
@@ -70,22 +73,22 @@ public class FilesController {
     }
 
     @GetMapping("/animals")
-    public ResponseEntity<List<Animal>> getAnimals(Model model,
-                             @RequestParam(value = "name", required = false) String name,
-                             @RequestParam(value = "type", required = false) String type,
-                             @RequestParam(value = "sex", required = false) String sex,
-                             @RequestParam(value = "weight", required = false) Integer weight,
-                             @RequestParam(value = "cost", required = false) Integer cost,
-                             @RequestParam(value = "category", required = false) String category,
-                             @RequestParam(value = "sortBy", required = false) String sortBy) {
+    public ResponseEntity<List<Animal>> getAnimals(
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "sex", required = false) String sex,
+            @RequestParam(value = "category", required = false) String category,
+            @RequestParam(value = "sortBy", required = false) String sortBy) {
 
-        List<Animal> animals = animalService.getAnimalsFromFile();
+        List<Animal> animals = animalsList.getAnimalList();
 
+        /*if (animals.isEmpty()) {
+            animalService.readFile();
+            animals = animalService.getAnimalsFromFile();
+            System.out.println(animals);
+        }*/
 
-        animals = animalService.filterAnimals(animals, name, type, sex, weight, cost, category);
+        animals = animalService.filterAnimals(animals, type, sex, category);
         animals = animalService.sortAnimals(animals, sortBy);
-
-        model.addAttribute("animals", animals);
 
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(animals);
     }

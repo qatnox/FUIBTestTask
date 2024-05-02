@@ -22,6 +22,9 @@ public class AnimalMapper {
 
     @Value("${readingFile.uploadDir}")
     private String uploadDir;
+
+    @Value("${savedFileDir}")
+    private String savedFileDir;
     private final ValidateObjects validateObjects = new ValidateObjects();
 
     private final Animals animals;
@@ -33,6 +36,10 @@ public class AnimalMapper {
 
     public String getUploadDir() {
         return uploadDir;
+    }
+
+    public String getSavedFileDir() {
+        return savedFileDir;
     }
 
     public void extensionCheck(MultipartFile file) {
@@ -98,12 +105,8 @@ public class AnimalMapper {
         }
     }
 
-    public List<Animal> getAnimalList() {
-        return animals.getAnimalList();
-    }
-
     public void saveToFile(List<Animal> animals) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\uploads\\result.csv"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(savedFileDir))) {
             writer.write("name" + ";"
                     + "type" + ";"
                     + "sex" + ";"

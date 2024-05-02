@@ -15,7 +15,6 @@ public class Animals {
     public List<Animal> animals;
 
     public List<Animal> getAnimalList() {
-        System.out.println(animals);
         return animals;
 
     }

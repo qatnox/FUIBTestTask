@@ -1,6 +1,5 @@
 package org.example.testtask.DAO;
 
-import org.example.testtask.models.Animals;
 import org.example.testtask.services.AnimalMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
