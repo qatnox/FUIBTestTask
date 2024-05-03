@@ -1,5 +1,7 @@
 package org.example.testtask.services;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.example.testtask.models.Animal;
@@ -17,6 +19,7 @@ import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+@Api(tags = "Animal Mapper", description = "Mapper for animal data")
 @Component
 public class AnimalMapper {
 
@@ -42,6 +45,7 @@ public class AnimalMapper {
         return savedFileDir;
     }
 
+    @ApiOperation("Checking file extension")
     public void extensionCheck(MultipartFile file) {
         String fileName = file.getOriginalFilename();
         if (FilenameUtils.getExtension(fileName).equals("csv")) {
@@ -51,6 +55,7 @@ public class AnimalMapper {
         }
     }
 
+    @ApiOperation("Mapping .csv file")
     public void mappingCSV(MultipartFile file) {
         String filePath = getUploadDir() + file.getOriginalFilename();
 
@@ -81,6 +86,7 @@ public class AnimalMapper {
         }
     }
 
+    @ApiOperation("Mapping .xml file")
     public void mappingXML(MultipartFile file) {
         String filePath = getUploadDir() + file.getOriginalFilename();
 
@@ -105,6 +111,8 @@ public class AnimalMapper {
         }
     }
 
+
+    @ApiOperation("Save data to .csv file")
     public void saveToFile(List<Animal> animals) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(savedFileDir))) {
             writer.write("name" + ";"

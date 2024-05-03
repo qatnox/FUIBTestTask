@@ -1,5 +1,7 @@
 package org.example.testtask.models;
 
+
+
 public class Animal {
 
     private String name;
@@ -10,6 +12,15 @@ public class Animal {
     private String category;
 
     public Animal() {
+    }
+
+    public Animal(String name, String type, String sex, int weight, int cost, String category) {
+        this.name = name;
+        this.type = type;
+        this.sex = sex;
+        this.weight = weight;
+        this.cost = cost;
+        this.category = category;
     }
 
     public String getName() {

@@ -1,5 +1,6 @@
 package org.example.testtask.models;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Component;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -14,6 +15,7 @@ public class Animals {
     @XmlElement(name = "animal")
     public List<Animal> animals;
 
+    @ApiOperation("Getting animal list")
     public List<Animal> getAnimalList() {
         return animals;
 

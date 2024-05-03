@@ -1,11 +1,16 @@
 package org.example.testtask.services;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.example.testtask.models.Animal;
-import org.example.testtask.models.File;
+
+import org.example.testtask.models.Animals;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,43 +19,53 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Api(tags = "Animal Service", description = "Service for animal data management")
 @Component
 public class AnimalService {
 
-    AnimalMapper animalMapper;
-    List<Animal> animalsFromFile = new ArrayList<>();
-    /*public void readFile() {
-        try (FileReader reader = new FileReader(animalMapper.getSavedFileDir());
-             BufferedReader buffReader = new BufferedReader(reader)) {
-            String line;
-            while ((line = buffReader.readLine()) != null) {
-                String[] data = line.split(";"); // Предполагается, что данные разделены запятой
+    @Autowired
+    private Animals animalsList;
 
-                // Перевірка довжини масиву для уникнення виходу за межі масиву
-                if (data.length >= 4) {
+    @Value("${savedFileDir}")
+    private String savedFileDir;
+
+    List<Animal> animalsFromFile = new ArrayList<>();
+
+    @ApiOperation("Read animals from the file")
+    public void readFile() {
+        try (FileReader reader = new FileReader(savedFileDir);
+             BufferedReader buffReader = new BufferedReader(reader)) {
+
+            String line;
+            buffReader.readLine();
+            while ((line = buffReader.readLine()) != null) {
+                String[] data = line.split(";");
+
+                if (data.length >= 6) {
                     String name = data[0].trim();
                     String type = data[1].trim();
                     String sex = data[2].trim();
-                    int weight = Integer.parseInt(data[3].trim()); // Предполагается, что вага - це ціле число
+                    int weight = Integer.parseInt(data[3].trim());
+                    int cost = Integer.parseInt(data[4].trim());
+                    String category = data[5].trim();
 
-                    // Опціонально, якщо ви маєте більше даних про тварин, що потрібно зчитати
-                    // Ви можете продовжити додавати дані до об'єкту Animal
-
-                    Animal animal = new Animal(name, type, sex, weight);
+                    Animal animal = new Animal(name, type, sex, weight, cost, category);
                     animalsFromFile.add(animal);
+
                 }
             }
+            animalsList.setAnimalList(animalsFromFile);
         } catch (IOException e) {
-            System.err.println("The process cannot access the file because it is being used by another process.");
-            System.exit(0);
+            System.err.println("Unable to read");
         }
-    }*/
+    }
+
 
     public List<Animal> getAnimalsFromFile() {
         return animalsFromFile;
     }
 
-
+    @ApiOperation("Filter animals by 3 parameters")
     public List<Animal> filterAnimals(List<Animal> animals, String type, String sex, String category) {
         Stream<Animal> filteredStream = animals.stream();
 
@@ -67,7 +82,7 @@ public class AnimalService {
         return filteredStream.collect(Collectors.toList());
     }
 
-
+    @ApiOperation("Sort animals (?sortBy=)")
     public List<Animal> sortAnimals(List<Animal> animals, String sortBy) {
         if (sortBy != null) {
             System.out.println("Sorting by: " + sortBy);

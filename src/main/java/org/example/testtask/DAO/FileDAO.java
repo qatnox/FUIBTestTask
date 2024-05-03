@@ -1,5 +1,7 @@
 package org.example.testtask.DAO;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.example.testtask.services.AnimalMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,7 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-
+@Api(tags = "File DAO", description = "Data Access Object for file management")
 @Component
 public class FileDAO {
 
@@ -20,6 +22,7 @@ public class FileDAO {
         this.animalMapper = animalMapper;
     }
 
+    @ApiOperation("Save file to directory")
     public void save(MultipartFile file) throws IOException {
         if (!file.isEmpty()) {
             String fileName = file.getOriginalFilename();
