@@ -3,6 +3,7 @@ package org.example.testtask.DAO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.example.testtask.services.AnimalMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +16,8 @@ import java.nio.file.Paths;
 @Component
 public class FileDAO {
 
-    private final String uploadDir = "C:\\uploads";
+    @Value("${readingFile.uploadDir}")
+    private String uploadDir;
     private final AnimalMapper animalMapper;
 
     public FileDAO(AnimalMapper animalMapper) {

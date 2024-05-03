@@ -47,6 +47,11 @@ public class FilesController {
     public String upload(@RequestParam("file") MultipartFile file) {
 
         String fileName = file.getOriginalFilename();
+
+        if (fileName == null) {
+            return "redirect:/files/error";
+        }
+
         String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
 
         if (!fileExtension.equalsIgnoreCase("csv") &&

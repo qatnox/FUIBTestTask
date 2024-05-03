@@ -20,6 +20,7 @@ To get started with the Animal Management System, follow these steps:
 - **Error page** - http://localhost:8080/files/error - page informing about the occurrence of an error.
 - **Page with applied filters** - http://localhost:8080/files/animals?type=cat&sex=male&category=3rd
 - **Page with applied sorting** -http://localhost:8080/files/animals?sortBy=weight
+- **API documentation** - http://localhost:8080/v3/api-docs
 ****
 
 ## Environment

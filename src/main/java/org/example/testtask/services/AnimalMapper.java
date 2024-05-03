@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.beanutils.BeanUtils;
+import org.example.testtask.controllers.FilesController;
 import org.example.testtask.models.Animal;
 import org.example.testtask.models.Animals;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ public class AnimalMapper {
     private String savedFileDir;
     private final ValidateObjects validateObjects = new ValidateObjects();
 
+    @Autowired
     private final Animals animals;
 
     @Autowired
@@ -58,7 +60,6 @@ public class AnimalMapper {
     @ApiOperation("Mapping .csv file")
     public void mappingCSV(MultipartFile file) {
         String filePath = getUploadDir() + file.getOriginalFilename();
-
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 
             String line;
