@@ -24,7 +24,11 @@ To get started with the Animal Management System, follow these steps:
 
 ## Environment
 - Java 17
-- Spring MVC
 - Maven
 - Apache Tomcat 9.0.87
+
+### Frameworks & stuff
+- Spring Boot
 - Thymeleaf
+- Jackson
+- OpenCSV
